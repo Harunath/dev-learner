@@ -83,11 +83,13 @@ export default function CreateCourse() {
 						className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 						required>
 						<option value="">Select Instructor</option>
-						{instructors.map((instructor) => (
-							<option key={instructor.id} value={instructor.id}>
-								{instructor.name}
-							</option>
-						))}
+						{instructors.map(
+							(instructor: { id: string | number; name: string }) => (
+								<option key={instructor.id} value={instructor.id}>
+									{instructor.name}
+								</option>
+							)
+						)}
 					</select>
 				</div>
 				<button
@@ -96,14 +98,6 @@ export default function CreateCourse() {
 					Create Course
 				</button>
 			</form>
-			{instructors.map((item) => {
-				return (
-					<div key={item.id}>
-						{item.id} {item.name}
-					</div>
-				);
-			})}
-			{instructorId + "Instructor id"}
 		</div>
 	);
 }
