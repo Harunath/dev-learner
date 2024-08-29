@@ -5,7 +5,17 @@ const client = new PrismaClient();
 
 export async function POST(req: NextRequest) {
 	try {
-		const { title, description, price, instructorId } = await req.json();
+		const {
+			title,
+			description,
+			price,
+			instructorId,
+		}: {
+			title: string;
+			description: string;
+			price: number;
+			instructorId: number;
+		} = await req.json();
 		const newCourse = await client.course.create({
 			data: {
 				title,
