@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
 
 export function GET() {
-	NextResponse.json({ msg: "hit routre successful" });
+	return NextResponse.json({ msg: "hit routre successful" });
 }
