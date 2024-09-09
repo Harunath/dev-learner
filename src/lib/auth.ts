@@ -10,24 +10,34 @@ export const authOptions = {
 		CredentialsProvider({
 			name: "Credentials",
 			credentials: {
-				phone: {
-					label: "Phone number",
+				email: {
+					label: "username",
 					type: "text",
-					placeholder: "1231231231",
+					placeholder: "Username",
 					required: true,
 				},
 				password: { label: "Password", type: "password", required: true },
 			},
 			async authorize(credentials) {
-				if (!credentials?.phone || !credentials.password) {
+				if (!credentials?.email || !credentials?.password) {
 					return null;
 				}
 
 				const existingUser = await client.user.findFirst({
 					where: {
-						phone: credentials.phone,
+						email: credentials.email,
+					},
+					include: {
+						courses: true, // Assuming you have courses as a relation
 					},
 				});
+
+				// Check if the user exists
+				if (!existingUser) {
+					return null;
+				}
+
+				// Continue with further logic here
 
 				if (existingUser) {
 					const passwordValidation = await bcrypt.compare(
@@ -35,10 +45,13 @@ export const authOptions = {
 						existingUser.password
 					);
 					if (passwordValidation) {
+						// Return user object with id as a string
 						return {
-							id: existingUser.id.toString(),
+							id: String(existingUser.id), // Make sure id is a string
 							name: existingUser.name,
 							email: existingUser.email,
+							role: existingUser.role,
+							phone: existingUser.phone,
 						};
 					}
 				}
@@ -56,8 +69,34 @@ export const authOptions = {
 		async session({ token, session }: any) {
 			if (token?.sub) {
 				session.user.id = token.sub;
+				session.user.role = token.role;
+				session.user.image = session.user.image || "";
 			}
 			return session;
+		},
+		async signIn({ user, account, profile }: any) {
+			const existingUser = await client.user.findFirst({
+				where: {
+					email: user.email,
+				},
+			});
+			if (existingUser) {
+				if (account.provider === "google") {
+					user.id = existingUser.id;
+				}
+			}
+
+			if (existingUser) {
+				return true; // Allow sign-in and redirect to home
+			} else {
+				const url = `/register?email=${encodeURIComponent(
+					user.email
+				)}&name=${encodeURIComponent(user.name)}`;
+				return url;
+			}
+		},
+		async jwt({ token, user, account, profile, isNewUser }: any) {
+			return token;
 		},
 	},
 };

@@ -2,15 +2,18 @@
 // app/register/page.tsx or pages/register.tsx
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const RegisterPage: React.FC = () => {
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
+	const searchParams = useSearchParams();
+	const initialEmail = searchParams.get("email") || "";
+	const initialName = searchParams.get("name") || "";
+	const [name, setName] = useState(initialName);
+	const [email, setEmail] = useState(initialEmail);
 	const [phone, setPhone] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
-
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 

@@ -1,7 +1,38 @@
 // app/page.tsx
+"use client";
+
 import Link from "next/link";
+import MyCourses from "./MyCourses";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Testimonials from "./Testimonials";
+import { userProfile } from "@/store/atoms";
+import { useRecoilState } from "recoil";
 
 const HomePage = () => {
+	const router = useRouter();
+	const [user, setUser] = useRecoilState(userProfile);
+
+	useEffect(() => {
+		const getUser = async () => {
+			const response = await fetch("/api/user", {
+				method: "GET",
+			});
+			setUser(await response.json());
+			console.log(user);
+		};
+		getUser();
+	}, []);
+
+	useEffect(() => {
+		if (!user) {
+			signIn(); // Redirect to sign in if no user is found
+		} else {
+			router.push("/"); // Redirect to home or another page if logged in
+		}
+	}, [user, router]);
+
 	// Example data (replace with real data from your API)
 	const popularCourses = [
 		{ id: 1, title: "React for Beginners", instructor: "John Doe" },
@@ -29,8 +60,13 @@ const HomePage = () => {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-3xl font-bold mb-6">Welcome to CourseHub</h1>
+			{status === "authenticated" && user?.name}
 
+			<h1 className="text-3xl font-bold mb-6">Welcome to CourseHub</h1>
+			<section className="mb-12">
+				<h2 className="text-2xl font-semibold mb-4">Your Courses</h2>
+				<MyCourses />
+			</section>
 			<section className="mb-12">
 				<h2 className="text-2xl font-semibold mb-4">Popular Courses</h2>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -81,6 +117,7 @@ const HomePage = () => {
 					))}
 				</div>
 			</section>
+			<Testimonials />
 		</div>
 	);
 };

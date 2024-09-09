@@ -1,25 +1,22 @@
 "use client";
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
-
-// export const NavBar = () => {
-// 	return (
-// 		<div>
-// 			<button onClick={() => signIn()}>Signin</button>
-// 			<button onClick={() => signOut()}>Sign out</button>
-// 		</div>
-// 	);
-// };
+import { useSession } from "next-auth/react";
+import { userProfile } from "@/store/atoms";
 
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
 
 const NavBar = () => {
+	const profile = useRecoilValue(userProfile);
+
+	const { data: session } = useSession();
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
 		<nav className="bg-blue-600 p-4">
 			<div className="container mx-auto flex justify-between items-center">
-				<div className="text-white text-lg font-bold">Student Portal</div>
+				<div className="text-white text-lg font-bold">Dev Learners</div>
 				<div className="md:hidden">
 					<button
 						onClick={() => setIsOpen(!isOpen)}
@@ -52,6 +49,15 @@ const NavBar = () => {
 								Home
 							</Link>
 						</li>
+						{profile.role === "ADMIN" && (
+							<li>
+								<Link
+									href="/admin"
+									className="block py-2 md:px-4 hover:bg-blue-700 rounded">
+									Admin
+								</Link>
+							</li>
+						)}
 						<li>
 							<Link
 								href="/courses"
@@ -66,20 +72,23 @@ const NavBar = () => {
 								Profile
 							</Link>
 						</li>
-						<li>
-							<button
-								onClick={() => signIn()}
-								className="block py-2 md:px-4 hover:bg-blue-700 rounded">
-								SignIn
-							</button>
-						</li>
-						<li>
-							<button
-								onClick={() => signOut()}
-								className="block py-2 md:px-4 hover:bg-blue-700 rounded">
-								SignOut
-							</button>
-						</li>
+						{!session?.user ? (
+							<li>
+								<button
+									onClick={() => signIn()}
+									className="block py-2 md:px-4 hover:bg-blue-700 rounded">
+									SignIn
+								</button>
+							</li>
+						) : (
+							<li>
+								<button
+									onClick={() => signOut()}
+									className="block py-2 md:px-4 hover:bg-blue-700 rounded">
+									SignOut
+								</button>
+							</li>
+						)}
 					</ul>
 				</div>
 			</div>

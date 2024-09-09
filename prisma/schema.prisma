@@ -35,28 +35,27 @@ enum UserRole {
 
 
 model Course {
-  id           Int      @id @default(autoincrement())
+  id           Int             @id @default(autoincrement())
   title        String
   description  String
   price        Float
+  category     courseCategory[] @default([])  // Make category an array of courseCategory
+  instructorName String?
   instructorId Int
-  students     User[]   @relation("StudentCourses") // Users enrolled in this course
-  lessons      Lesson[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  students     User[]          @relation("StudentCourses") // Users enrolled in this course
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   Payment      Payment[]
 }
 
-
-model Lesson {
-  id          Int       @id @default(autoincrement())
-  title       String
-  content     String
-  course      Course    @relation(fields: [courseId], references: [id])
-  courseId    Int
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+enum courseCategory {
+  WebDevelopment
+  Backend
+  Frontend
+  AI
+  DataScience
 }
+
 
 model Payment {
   id          Int       @id @default(autoincrement())

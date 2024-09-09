@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { METHODS } from "http";
 
 interface Course {
 	id: number;
@@ -41,9 +40,7 @@ export default function Courses() {
 			<ul>
 				{courses.map((course) => (
 					<li key={course.id}>
-						<Link href={`/admin/courses/${course.id}`}>
-							<Link href={`/admin/courses/${course.id}`}>{course.title}</Link>
-						</Link>
+						<Link href={`/admin/courses/${course.id}`}>{course.title}</Link>
 					</li>
 				))}
 			</ul>

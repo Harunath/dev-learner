@@ -1,5 +1,12 @@
+import Link from "next/link";
+
 const AdminHome = () => {
-	return <div>This is admin home</div>;
+	return (
+		<div>
+			<Link href={"/admin/courses"}>Courses</Link>
+			<Link href={"/admin/register"}>Register</Link>
+		</div>
+	);
 };
 
 export default AdminHome;

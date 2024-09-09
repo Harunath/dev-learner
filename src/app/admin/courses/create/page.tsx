@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function CreateCourse() {
 	const [title, setTitle] = useState("");
@@ -13,11 +14,8 @@ export default function CreateCourse() {
 	// Fetch instructors on component mount
 	useEffect(() => {
 		const fetchInstructors = async () => {
-			const response = await fetch("/api/instructor", {
-				method: "GET",
-			});
-			const data = await response.json();
-			setInstructors(data);
+			const response = await axios.get("/api/instructor");
+			setInstructors(response.data);
 		};
 
 		fetchInstructors();
@@ -26,20 +24,14 @@ export default function CreateCourse() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		await fetch("/api/admin/courses/create", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				title,
-				description,
-				price: parseFloat(price as string),
-				instructorId: parseInt(instructorId as string),
-			}),
+		await axios.post("/api/admin/courses/create", {
+			title,
+			description,
+			price: parseFloat(price as string),
+			instructorId: parseInt(instructorId as string),
 		});
 
-		// router.push("/admin/courses");
+		router.push("/admin/courses");
 	};
 
 	return (
