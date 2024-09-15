@@ -1,13 +1,14 @@
 "use client";
+import axios from "axios";
 import { useState } from "react";
 
-const AdminCreate = () => {
+const InstructorCreate = () => {
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
 		phone: "",
 		password: "",
-		role: "ADMIN", // Default role
+		role: "INSTRUCTOR", // Default role
 	});
 
 	const handleChange = (
@@ -22,15 +23,11 @@ const AdminCreate = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const response = await fetch("/api/admin/", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(formData),
+		const response = await axios.post("/api/instructors/", {
+			...formData,
 		});
 
-		if (response.ok) {
+		if (response.data) {
 			alert("User created successfully");
 		} else {
 			alert("Failed to create user");
@@ -100,22 +97,6 @@ const AdminCreate = () => {
 					required
 				/>
 			</div>
-
-			<div className="mb-4">
-				<label htmlFor="role" className="block text-gray-700 font-bold mb-2">
-					Role
-				</label>
-				<select
-					name="role"
-					value={formData.role}
-					onChange={handleChange}
-					className="w-full p-2 border border-gray-300 rounded"
-					required>
-					<option value="INSTRUCTOR">Instructor</option>
-					<option value="ADMIN">Admin</option>
-				</select>
-			</div>
-
 			<button
 				type="submit"
 				className="w-full p-2 bg-blue-500 text-white font-bold rounded">
@@ -125,4 +106,4 @@ const AdminCreate = () => {
 	);
 };
 
-export default AdminCreate;
+export default InstructorCreate;

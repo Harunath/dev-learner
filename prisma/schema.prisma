@@ -40,9 +40,11 @@ model Course {
   description  String
   price        Float
   category     courseCategory[] @default([])  // Make category an array of courseCategory
+  isFeatured   Boolean  @default(false) // This field will mark a course as featured
   instructorName String?
   instructorId Int
   students     User[]          @relation("StudentCourses") // Users enrolled in this course
+  lessons      Lesson[]         @relation("CourseLessons")   // Lessons for this course
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   Payment      Payment[]
@@ -54,6 +56,16 @@ enum courseCategory {
   Frontend
   AI
   DataScience
+}
+
+model Lesson {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String   // Content for the lesson, or this could be a URL if it's a video
+  course     Course   @relation(fields: [courseId], references: [id], name: "CourseLessons")
+  courseId   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 

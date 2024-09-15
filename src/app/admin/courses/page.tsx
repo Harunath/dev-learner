@@ -1,6 +1,5 @@
-"use client";
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 
 interface Course {
 	id: number;
@@ -11,25 +10,9 @@ interface Course {
 	updatedAt: string;
 }
 
-export default function Courses() {
-	const [courses, setCourses] = useState<Course[]>([]);
-
-	useEffect(() => {
-		const fetchCourses = async () => {
-			try {
-				const response = await fetch("/api/admin/courses");
-				if (!response.ok) {
-					throw new Error("Network response was not ok");
-				}
-				const data = await response.json();
-				setCourses(data);
-			} catch (error) {
-				console.error("Error fetching courses:", error);
-			}
-		};
-
-		fetchCourses();
-	}, []);
+export default async function Courses() {
+	const response = await axios.get("http://localhost:3000/api/admin/courses");
+	const courses: Course[] = response.data;
 
 	return (
 		<div>

@@ -3,8 +3,20 @@ export interface courses {
 	title: string;
 	description: string;
 	price: number;
-	instructorName?: string;
+	category: courseCategory[];
+	isFeatured: boolean;
+	instructorName: string | null;
 	instructorId: number;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+enum courseCategory {
+	WebDevelopment,
+	Backend,
+	Frontend,
+	AI,
+	DataScience,
 }
 
 export interface user {

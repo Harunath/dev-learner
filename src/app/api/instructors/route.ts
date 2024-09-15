@@ -1,9 +1,20 @@
-// app/api/admin/instructor/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
-const client = new PrismaClient();
+const prisma = new PrismaClient();
+
+export async function GET(req: NextRequest) {
+	try {
+		const instructors = await prisma.user.findMany({
+			where: { role: "INSTRUCTOR" },
+		});
+		return NextResponse.json({ data: instructors }, { status: 200 });
+	} catch (e) {
+		console.log(e);
+		return NextResponse.json({ Error: e }, { status: 500 });
+	}
+}
 
 interface InstructorBody {
 	name: string;
@@ -12,14 +23,13 @@ interface InstructorBody {
 	password: string;
 }
 
-// Handle POST requests to create a new instructor
 export async function POST(req: NextRequest) {
 	try {
 		const body: InstructorBody = await req.json();
 		const { name, email, phone, password } = body;
 
 		// Check if user already exists
-		const existingUser = await client.user.findUnique({
+		const existingUser = await prisma.user.findUnique({
 			where: { email },
 		});
 
@@ -34,43 +44,24 @@ export async function POST(req: NextRequest) {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		// Create the new instructor
-		const newInstructor = await client.user.create({
+		const newAdmin = await prisma.user.create({
 			data: {
 				name,
 				email,
 				password: hashedPassword,
 				phone,
-				role: "INSTRUCTOR",
+				role: "INSTRUCTOR", // Assuming you have a role field
 			},
 		});
 
-		return NextResponse.json(newInstructor, { status: 201 });
+		return NextResponse.json(newAdmin, { status: 201 });
 	} catch (error) {
-		console.error("Error creating instructor:", error);
+		console.error("Error creating admin:", error);
 		return NextResponse.json(
 			{ message: "Internal server error" },
 			{ status: 500 }
 		);
 	} finally {
-		await client.$disconnect();
-	}
-}
-
-// Handle GET requests to fetch all instructors
-export async function GET(req: NextRequest) {
-	try {
-		const instructors = await client.user.findMany({
-			where: { role: "INSTRUCTOR" },
-			select: { id: true, name: true },
-		});
-		return NextResponse.json(instructors, { status: 200 });
-	} catch (error) {
-		console.error("Error fetching instructors:", error);
-		return NextResponse.json(
-			{ message: "Internal server error" },
-			{ status: 500 }
-		);
-	} finally {
-		await client.$disconnect();
+		await prisma.$disconnect();
 	}
 }

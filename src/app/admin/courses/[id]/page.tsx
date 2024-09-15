@@ -12,15 +12,35 @@ export default function EditCourse() {
 	const [description, setDescription] = useState("");
 	const [price, setPrice] = useState<number | string>("");
 	const [instructorId, setInstructorId] = useState<number | string>("");
+	const [instructorName, setInstructorName] = useState("");
 	const [instructors, setInstructors] = useState([]);
+	const Categories = [
+		"WebDevelopment",
+		"Backend",
+		"Frontend",
+		"AI",
+		"DataScience",
+	];
+
+	// State to store selected categories
+	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+	// Function to handle checkbox changes
+	const handleCheckboxChange = (category: string) => {
+		if (selectedCategories.includes(category)) {
+			setSelectedCategories(
+				selectedCategories.filter((selected) => selected !== category)
+			);
+		} else {
+			setSelectedCategories([...selectedCategories, category]);
+		}
+	};
 
 	// Fetch instructors on component mount
 	useEffect(() => {
 		const fetchInstructors = async () => {
-			const response = await fetch("/api/instructor", {
-				method: "GET",
-			});
-			const data = await response.json();
+			const response = await axios.get("/api/instructors");
+			const data = await response.data.data;
 			setInstructors(data);
 		};
 
@@ -42,17 +62,12 @@ export default function EditCourse() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		await fetch(`/api/admin/courses/${id}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				title,
-				description,
-				price: parseFloat(price as string),
-				instructorId: parseInt(instructorId as string),
-			}),
+		await axios.put(`/api/admin/courses/${id}`, {
+			title,
+			description,
+			price: parseFloat(price as string),
+			instructorId: parseInt(instructorId as string),
+			category: selectedCategories,
 		});
 
 		router.push("/admin/courses");
@@ -99,17 +114,42 @@ export default function EditCourse() {
 							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
 						/>
 					</div>
+					<div>
+						<label className="block mb-2 font-medium text-gray-700">
+							Categories:
+						</label>
+						{Categories.map((category) => (
+							<div key={category} className="mb-2">
+								<label className="inline-flex items-center">
+									<input
+										type="checkbox"
+										value={category}
+										checked={selectedCategories.includes(category)}
+										onChange={() => handleCheckboxChange(category)}
+										className="form-checkbox h-5 w-5 text-blue-600"
+									/>
+									<span className="ml-2 text-gray-700">{category}</span>
+								</label>
+							</div>
+						))}
+					</div>
 					<div className="mb-4">
 						<label className="block text-gray-700">Instructor:</label>
 						<select
 							value={instructorId}
-							onChange={(e) => setInstructorId(e.target.value)}
+							onChange={(e) => {
+								const [id, name] = e.target.value.split(",");
+								setInstructorId(id);
+								setInstructorName(name);
+							}}
 							className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 							required>
 							<option value="">Select Instructor</option>
 							{instructors.map(
 								(instructor: { id: string | number; name: string }) => (
-									<option key={instructor.id} value={instructor.id}>
+									<option
+										key={instructor.id}
+										value={`${instructor.id},${instructor.name}`}>
 										{instructor.name}
 									</option>
 								)

@@ -14,8 +14,8 @@ export default function CreateCourse() {
 	// Fetch instructors on component mount
 	useEffect(() => {
 		const fetchInstructors = async () => {
-			const response = await axios.get("/api/instructor");
-			setInstructors(response.data);
+			const response = await axios.get("/api/instructors");
+			setInstructors(response.data.data);
 		};
 
 		fetchInstructors();

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { courses } from "@/lib/types";
+import Link from "next/link";
 
 const CourseList = () => {
 	const [courses, setCourses] = useState<courses[]>([]);
@@ -31,9 +32,20 @@ const CourseList = () => {
 			{courses.length > 1 ? (
 				courses.map((course) => (
 					<div key={course.id} className="border rounded-lg p-4 shadow-md">
-						<h2 className="text-xl font-bold">{course.title}</h2>
-						<p>{course.description}</p>
-						{course.instructorName && <p>by : {course.instructorName}</p>}
+						<div className="flex justify-center items-center h-40 w-full bg-gray-200 rounded-xl">
+							img
+						</div>
+						<div className="mt-4">
+							<p className="text-xl font-bold">{course.title}</p>
+							{course.instructorName && <p>by : {course.instructorName}</p>}
+						</div>
+						<div className=" mt-4 w-full h-fit">
+							<Link
+								href={`/my-courses/${course.id}`}
+								className="flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full rounded">
+								View Content
+							</Link>
+						</div>
 					</div>
 				))
 			) : (

@@ -41,10 +41,21 @@ const CourseList = () => {
 			{courses.length === 0 && <p>0 enrolled courses</p>}
 			{courses.map((course) => (
 				<div key={course.id} className="border rounded-lg p-4 shadow-md">
+					<div className="flex justify-center items-center h-40 w-full bg-gray-200 rounded-xl">
+						img
+					</div>
 					<h2 className="text-xl font-bold">{course.title}</h2>
 					<p>{course.description}</p>
 					{course.instructorName && <p>by : {course.instructorName}</p>}
 					<p className="text-green-600 font-semibold">${course.price}</p>
+					<div>
+						{course.category &&
+							course.category.map((category, index) => (
+								<p className="bg-gray-400 rounded px-4 my-2 w-fit" key={index}>
+									{category}
+								</p>
+							))}
+					</div>
 					<button
 						onClick={() => handleBuyCourse(course.id)}
 						className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600">

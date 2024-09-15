@@ -10,11 +10,13 @@ export async function POST(req: NextRequest) {
 			description,
 			price,
 			instructorId,
+			instructorName,
 		}: {
 			title: string;
 			description: string;
 			price: number;
 			instructorId: number;
+			instructorName: string;
 		} = await req.json();
 		const newCourse = await client.course.create({
 			data: {
@@ -22,6 +24,7 @@ export async function POST(req: NextRequest) {
 				description,
 				price,
 				instructorId,
+				instructorName,
 			},
 		});
 		return NextResponse.json(newCourse, { status: 201 });

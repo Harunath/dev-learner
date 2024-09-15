@@ -10,12 +10,13 @@ interface InstructorBody {
 	email: string;
 	phone: string;
 	password: string;
+	role: "INSTRUCTOR" | "ADMIN";
 }
 
 export async function POST(req: NextRequest) {
 	try {
 		const body: InstructorBody = await req.json();
-		const { name, email, phone, password } = body;
+		const { name, email, phone, password, role } = body;
 
 		// Check if user already exists
 		const existingUser = await client.user.findUnique({
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
 				email,
 				password: hashedPassword,
 				phone,
-				role: "ADMIN", // Assuming you have a role field
+				role: role, // Assuming you have a role field
 			},
 		});
 

@@ -24,7 +24,7 @@ const InstructorCreate = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const response = await fetch("/api/instructor/", {
+		const response = await fetch("/api/instructors/", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

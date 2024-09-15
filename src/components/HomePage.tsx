@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import Testimonials from "./Testimonials";
 import { userProfile } from "@/store/atoms";
 import { useRecoilState } from "recoil";
+import axios from "axios";
 
 const HomePage = () => {
 	const router = useRouter();
@@ -16,11 +17,8 @@ const HomePage = () => {
 
 	useEffect(() => {
 		const getUser = async () => {
-			const response = await fetch("/api/user", {
-				method: "GET",
-			});
-			setUser(await response.json());
-			console.log(user);
+			const response = await axios.get("/api/user");
+			setUser(response.data);
 		};
 		getUser();
 	}, []);
@@ -60,11 +58,11 @@ const HomePage = () => {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			{status === "authenticated" && user?.name}
-
 			<h1 className="text-3xl font-bold mb-6">Welcome to CourseHub</h1>
 			<section className="mb-12">
-				<h2 className="text-2xl font-semibold mb-4">Your Courses</h2>
+				<Link href={"/my-courses"} className="text-2xl font-semibold mb-4">
+					My Courses
+				</Link>
 				<MyCourses />
 			</section>
 			<section className="mb-12">

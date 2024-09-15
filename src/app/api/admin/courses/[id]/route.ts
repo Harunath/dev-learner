@@ -26,14 +26,15 @@ export async function GET(
 	}
 }
 
-export async function POST(
+export async function PUT(
 	req: NextRequest,
 	{ params }: { params: { id: string } }
 ) {
 	try {
 		// Parse the request body
 		const body = await req.json();
-		const { title, description, price, instructorId } = body;
+		const { title, description, price, instructorId, category } = body;
+		console.log(category);
 
 		// Update the course
 		const updatedCourse = await client.course.update({
@@ -43,11 +44,32 @@ export async function POST(
 				description,
 				price,
 				instructorId,
+				category,
 			},
 		});
-
 		// Return a successful response
 		return NextResponse.json({ updatedCourse }, { status: 200 });
+	} catch (error) {
+		console.error(error);
+		// Return an error response
+		return NextResponse.json(
+			{ message: "Something went wrong" },
+			{ status: 500 }
+		);
+	}
+}
+
+export async function DELETE(
+	req: NextRequest,
+	{ params }: { params: { id: string } }
+) {
+	try {
+		// Update the course
+		const deleteCourse = await client.course.delete({
+			where: { id: Number(params.id) },
+		});
+		// Return a successful response
+		return NextResponse.json({ deleteCourse }, { status: 200 });
 	} catch (error) {
 		console.error(error);
 		// Return an error response
