@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { courses } from "@/lib/types";
@@ -11,8 +10,9 @@ function ViewContent() {
 	useEffect(() => {
 		const getCourse = async (): Promise<void> => {
 			try {
-				const response = await axios.get(`/api/courses/${params.id}`);
-				setCourse(response.data.course);
+				const response = await fetch(`/api/courses/${params.id}`);
+				const data = await response.json();
+				setCourse(data.course);
 			} catch (error) {
 				console.error("Error fetching course data:", error);
 			}

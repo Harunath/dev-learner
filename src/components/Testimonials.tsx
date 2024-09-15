@@ -1,7 +1,7 @@
 // TestimonialSlider.tsx
-import React from "react";
 import Slider from "react-slick";
 import { testimonials } from "@/lib/testimonialsData";
+import Image from "next/image";
 
 const Testimonials = () => {
 	const settings = {
@@ -24,17 +24,19 @@ const Testimonials = () => {
 					<div key={testimonial.id} className="flex items-center p-4">
 						<div className="shadow-lg rounded-lg p-6 bg-blue-300">
 							<div className="flex items-center gap-x-4 mb-4 w-fit">
-								<img
+								{/* <Image
+									width={64}
+									height={64}
 									src={testimonial.image}
 									alt={testimonial.name}
 									className="w-16 h-16 rounded-full"
-								/>
+								/> */}
 								<div>
 									<h4 className="text-lg font-semibold">{testimonial.name}</h4>
 									<p className="text-sm text-gray-500">{testimonial.title}</p>
 								</div>
 							</div>
-							<p className="text-gray-600 italic">"{testimonial.quote}"</p>
+							<p className="text-gray-600 italic">{testimonial.quote}</p>
 						</div>
 					</div>
 				))}

@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import { useState } from "react";
 
 const InstructorCreate = () => {
@@ -23,11 +22,18 @@ const InstructorCreate = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const response = await axios.post("/api/instructors/", {
-			...formData,
+		const response = await fetch("/api/instructors/", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json", // Set the appropriate headers
+			},
+			body: JSON.stringify(formData), // Convert formData to JSON
 		});
 
-		if (response.data) {
+		const data = await response.json();
+
+		if (response.ok) {
+			// Check if the request was successful
 			alert("User created successfully");
 		} else {
 			alert("Failed to create user");

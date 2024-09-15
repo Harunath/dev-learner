@@ -1,7 +1,6 @@
 "use client";
 // components/CourseList.tsx
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { courses } from "@/lib/types";
 import Link from "next/link";
 
@@ -13,8 +12,9 @@ const CourseList = () => {
 	useEffect(() => {
 		const fetchCourses = async () => {
 			try {
-				const response = await axios.get("/api/user/courses");
-				setCourses(response.data);
+				const response = await fetch("/api/user/courses");
+				const data = await response.json();
+				setCourses(data);
 				setLoading(false);
 			} catch (err) {
 				setError("Failed to fetch courses");

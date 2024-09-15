@@ -1,9 +1,9 @@
 import { user } from "@/lib/types";
-import axios from "axios";
 
 export default async function Instructors() {
-	const response = await axios.get("http://localhost:3000/api/instructors");
-	const instructors: user[] = response.data.data;
+	const response = await fetch("/api/instructors");
+	const data = await response.json();
+	const instructors: user[] = data;
 	console.log(instructors);
 
 	return (

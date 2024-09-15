@@ -1,7 +1,6 @@
 "use client";
 // components/CourseList.tsx
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { courses } from "@/lib/types";
 
 const CourseList = () => {
@@ -12,8 +11,9 @@ const CourseList = () => {
 	useEffect(() => {
 		const fetchCourses = async () => {
 			try {
-				const response = await axios.get("/api/courses");
-				setCourses(response.data);
+				const response = await fetch("/api/courses");
+				const data = await response.json();
+				setCourses(data);
 				setLoading(false);
 			} catch (err) {
 				setError("Failed to fetch courses");
@@ -26,7 +26,15 @@ const CourseList = () => {
 
 	const handleBuyCourse = async (courseId: number) => {
 		try {
-			await axios.post("/api/user/courses/buy", { courseId });
+			await fetch("/api/user/courses/buy", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json", // Set the Content-Type header
+				},
+				body: JSON.stringify({
+					courseId, // Pass the courseId as part of the JSON body
+				}),
+			});
 			alert("Course purchased successfully!");
 		} catch (err) {
 			alert("Failed to purchase course");

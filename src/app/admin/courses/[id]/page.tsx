@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import axios from "axios";
 
 export default function EditCourse() {
 	const router = useRouter();
@@ -39,20 +38,21 @@ export default function EditCourse() {
 	// Fetch instructors on component mount
 	useEffect(() => {
 		const fetchInstructors = async () => {
-			const response = await axios.get("/api/instructors");
-			const data = await response.data.data;
+			const response = await fetch("/api/instructors");
+			const data = await response.json();
 			setInstructors(data);
 		};
 
 		fetchInstructors();
 		if (id) {
 			const getCourse = async () => {
-				const response = await axios.get(`/api/admin/courses/${id}`);
-				if (response.data) {
-					setTitle(response.data.data.title);
-					setDescription(response.data.data.description);
-					setPrice(response.data.data.price);
-					setInstructorId(response.data.data.instructorId);
+				const response = await fetch(`/api/admin/courses/${id}`);
+				const data = await response.json();
+				if (data) {
+					setTitle(data.title);
+					setDescription(data.description);
+					setPrice(data.price);
+					setInstructorId(data.instructorId);
 				}
 			};
 			getCourse();
@@ -62,12 +62,15 @@ export default function EditCourse() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		await axios.put(`/api/admin/courses/${id}`, {
-			title,
-			description,
-			price: parseFloat(price as string),
-			instructorId: parseInt(instructorId as string),
-			category: selectedCategories,
+		await fetch(`/${id}`, {
+			method: "PUT",
+			body: JSON.stringify({
+				title,
+				description,
+				price: parseFloat(price as string),
+				instructorId: parseInt(instructorId as string),
+				category: selectedCategories,
+			}),
 		});
 
 		router.push("/admin/courses");

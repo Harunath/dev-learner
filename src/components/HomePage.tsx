@@ -9,7 +9,6 @@ import { useEffect } from "react";
 import Testimonials from "./Testimonials";
 import { userProfile } from "@/store/atoms";
 import { useRecoilState } from "recoil";
-import axios from "axios";
 
 const HomePage = () => {
 	const router = useRouter();
@@ -17,19 +16,17 @@ const HomePage = () => {
 
 	useEffect(() => {
 		const getUser = async () => {
-			const response = await axios.get("/api/user");
-			setUser(response.data);
+			const response = await fetch("/api/user");
+			const data = await response.json();
+			setUser(data);
 		};
 		getUser();
-	}, []);
-
-	useEffect(() => {
 		if (!user) {
 			signIn(); // Redirect to sign in if no user is found
 		} else {
 			router.push("/"); // Redirect to home or another page if logged in
 		}
-	}, [user, router]);
+	}, []);
 
 	// Example data (replace with real data from your API)
 	const popularCourses = [

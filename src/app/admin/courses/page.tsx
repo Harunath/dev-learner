@@ -1,5 +1,4 @@
 import Link from "next/link";
-import axios from "axios";
 
 interface Course {
 	id: number;
@@ -11,8 +10,10 @@ interface Course {
 }
 
 export default async function Courses() {
-	const response = await axios.get("http://localhost:3000/api/admin/courses");
-	const courses: Course[] = response.data;
+	const response = await fetch("http://localhost:3000/api/admin/courses", {
+		method: "GET",
+	});
+	const courses: Course[] = await response.json();
 
 	return (
 		<div>
