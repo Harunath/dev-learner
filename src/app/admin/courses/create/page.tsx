@@ -13,7 +13,9 @@ export default function CreateCourse() {
 	// Fetch instructors on component mount
 	useEffect(() => {
 		const fetchInstructors = async () => {
-			const response = await fetch("/api/instructors");
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/instructors`
+			);
 			const data = await response.json();
 			setInstructors(data);
 		};
@@ -24,15 +26,18 @@ export default function CreateCourse() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		await fetch("/api/admin/courses/create", {
-			method: "POST",
-			body: JSON.stringify({
-				title,
-				description,
-				price: parseFloat(price as string),
-				instructorId: parseInt(instructorId as string),
-			}),
-		});
+		await fetch(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/courses/create`,
+			{
+				method: "POST",
+				body: JSON.stringify({
+					title,
+					description,
+					price: parseFloat(price as string),
+					instructorId: parseInt(instructorId as string),
+				}),
+			}
+		);
 
 		router.push("/admin/courses");
 	};

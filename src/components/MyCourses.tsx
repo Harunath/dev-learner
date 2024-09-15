@@ -12,7 +12,9 @@ const CourseList = () => {
 	useEffect(() => {
 		const fetchCourses = async () => {
 			try {
-				const response = await fetch("/api/user/courses");
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/courses`
+				);
 				const data = await response.json();
 				setCourses(data);
 				setLoading(false);

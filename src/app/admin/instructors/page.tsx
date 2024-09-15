@@ -1,7 +1,9 @@
 import { user } from "@/lib/types";
 
 export default async function Instructors() {
-	const response = await fetch("/api/instructors");
+	const response = await fetch(
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/instructors`
+	);
 	const data = await response.json();
 	const instructors: user[] = data;
 	console.log(instructors);

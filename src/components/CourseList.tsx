@@ -11,7 +11,9 @@ const CourseList = () => {
 	useEffect(() => {
 		const fetchCourses = async () => {
 			try {
-				const response = await fetch("/api/courses");
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/courses`
+				);
 				const data = await response.json();
 				setCourses(data);
 				setLoading(false);
@@ -26,15 +28,18 @@ const CourseList = () => {
 
 	const handleBuyCourse = async (courseId: number) => {
 		try {
-			await fetch("/api/user/courses/buy", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json", // Set the Content-Type header
-				},
-				body: JSON.stringify({
-					courseId, // Pass the courseId as part of the JSON body
-				}),
-			});
+			await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/courses/buy`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json", // Set the Content-Type header
+					},
+					body: JSON.stringify({
+						courseId, // Pass the courseId as part of the JSON body
+					}),
+				}
+			);
 			alert("Course purchased successfully!");
 		} catch (err) {
 			alert("Failed to purchase course");

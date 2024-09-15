@@ -10,9 +10,12 @@ interface Course {
 }
 
 export default async function Courses() {
-	const response = await fetch("http://localhost:3000/api/admin/courses", {
-		method: "GET",
-	});
+	const response = await fetch(
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/courses`,
+		{
+			method: "GET",
+		}
+	);
 	const courses: Course[] = await response.json();
 
 	return (

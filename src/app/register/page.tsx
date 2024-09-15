@@ -18,18 +18,21 @@ const RegisterPage: React.FC = () => {
 		e.preventDefault();
 
 		try {
-			const res = await fetch("/api/user/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					name,
-					email,
-					phone,
-					password,
-				}),
-			});
+			const res = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/register`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						name,
+						email,
+						phone,
+						password,
+					}),
+				}
+			);
 
 			if (res.ok) {
 				// Redirect or show success message

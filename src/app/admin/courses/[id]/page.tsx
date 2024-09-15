@@ -38,7 +38,9 @@ export default function EditCourse() {
 	// Fetch instructors on component mount
 	useEffect(() => {
 		const fetchInstructors = async () => {
-			const response = await fetch("/api/instructors");
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/instructors`
+			);
 			const data = await response.json();
 			setInstructors(data);
 		};
@@ -46,7 +48,9 @@ export default function EditCourse() {
 		fetchInstructors();
 		if (id) {
 			const getCourse = async () => {
-				const response = await fetch(`/api/admin/courses/${id}`);
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/courses/${id}`
+				);
 				const data = await response.json();
 				if (data) {
 					setTitle(data.title);
@@ -62,7 +66,7 @@ export default function EditCourse() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		await fetch(`/${id}`, {
+		await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/courses/${id}`, {
 			method: "PUT",
 			body: JSON.stringify({
 				title,

@@ -22,13 +22,16 @@ const AdminCreate = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const response = await fetch("/api/admin/", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(formData),
-		});
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			}
+		);
 
 		if (response.ok) {
 			alert("User created successfully");

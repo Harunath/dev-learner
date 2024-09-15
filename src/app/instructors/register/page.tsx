@@ -22,13 +22,16 @@ const InstructorCreate = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		const response = await fetch("/api/instructors/", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json", // Set the appropriate headers
-			},
-			body: JSON.stringify(formData), // Convert formData to JSON
-		});
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/instructors/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json", // Set the appropriate headers
+				},
+				body: JSON.stringify(formData), // Convert formData to JSON
+			}
+		);
 
 		const data = await response.json();
 

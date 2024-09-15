@@ -10,7 +10,9 @@ function ViewContent() {
 	useEffect(() => {
 		const getCourse = async (): Promise<void> => {
 			try {
-				const response = await fetch(`/api/courses/${params.id}`);
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/courses/${params.id}`
+				);
 				const data = await response.json();
 				setCourse(data.course);
 			} catch (error) {

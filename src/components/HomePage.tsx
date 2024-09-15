@@ -16,7 +16,9 @@ const HomePage = () => {
 
 	useEffect(() => {
 		const getUser = async () => {
-			const response = await fetch("/api/user");
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user`
+			);
 			const data = await response.json();
 			setUser(data);
 		};
